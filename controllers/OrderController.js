@@ -30,25 +30,26 @@ const placeOrder = async (req, res) => {
   }
 };
 
-const addItemsToExistingOrder = async (req, res) => {
+
+const updateOrder = async (req, res) => {
   try {
     const orderId = req.query.OrderId;
     const tableId = req.query.TableId;
-    const {orderDetails} = req.body;
-    const {newOrderItems} = req.body;
+    const { orderDetails } = req.body;
+    const { orderItems } = req.body;
     const pool = await poolPromise;
     const request = pool.request();
 
     request.input("OrderId", sql.Int, orderId);
     request.input("TableId", sql.Int, tableId);
-    request.input("NewOrderItems", sql.TVP, newOrderItems);
     request.input("OrderTotal", sql.Int, orderDetails.OrderTotal);
+    request.input("OrderItems", sql.TVP, orderItems);   
 
-    await request.execute("addItemsToExisitingOrder")
+    await request.execute("updateOrder");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-module.exports = { placeOrder };
+module.exports = { placeOrder, updateOrder };
