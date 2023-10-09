@@ -11,3 +11,29 @@ router.route("/updateMenuCategory").patch(updateMenuCategory);
 router.route("/updateMenuItem").patch(updateMenuItem);
 
 module.exports = router;
+
+// RequestBody for addNewMenuCategory
+// {
+//     "menuCategories": [
+//         {"CategoryName": "Starters"},
+//         {"CategoryName": "Mocktails"}
+//     ]
+// }
+
+//updateMenuCategory
+// params: http://localhost:3000/menu/updateMenuCategory?CategoryId=2
+// request body:
+//{
+//     "CategoryName": "Starters"
+//}
+
+
+//addNewMenuItems request body
+// {
+//     "menuItems":[
+//         { "CategoryId": "2", "ItemName": "Paneer Tikka", "ItemPrice" : "200", "Available": 1 },
+//         { "CategoryId": "3", "ItemName": "Blue Lagoon", "ItemPrice" : "160", "Available": 1 }
+//     ]
+// }
+
+

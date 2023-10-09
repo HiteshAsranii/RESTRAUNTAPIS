@@ -38,7 +38,7 @@ const addMenuItems = async (req, res) => {
       request.input("categoryId", sql.Int, CategoryId);
       request.input("itemName", sql.VarChar, ItemName);
       request.input("price", sql.Int, ItemPrice);
-      request.input("available", sql.Binary, Available);
+      request.input("available", sql.Int, Available);
 
       await request.query(
         "INSERT INTO MenuItems (CategoryId, ItemName, ItemPrice, Available) VALUES (@categoryId, @itemName, @price, @available)"
