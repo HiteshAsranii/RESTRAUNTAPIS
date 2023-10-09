@@ -1,34 +1,59 @@
 const express = require("express");
-const {decryptMessage} = require('../security/Decryption')
-const md5= require('md5')
-const { sql, poolPromise } = require('../ConnectionProvider'); // Assuming your file is named db.js
+const { decryptMessage } = require("../security/Decryption");
+const md5 = require("md5");
+const { sql, poolPromise } = require("../ConnectionProvider"); // Assuming your file is named db.js
 const app = express();
 
 // Middleware for parsing request bodies
 app.use(express.json());
 
-
 const userRegistration = async (req, res) => {
-    const { UserName, PhoneNo, Email, Password } = req.body
-    const decryptedPassword = decryptMessage(Password);
-    const hashedPassword = md5(decryptedPassword);
-    try {
-        const pool = await poolPromise;
+  const { UserName, PhoneNo, Email, Password } = req.body;
+  const decryptedPassword = decryptMessage(Password);
+  const hashedPassword = md5(decryptedPassword);
+  try {
+    const pool = await poolPromise;
 
-        const request = pool.request();
-        request.input('UserName', sql.VarChar, UserName);
-        request.input('PhoneNo', sql.BigInt, PhoneNo);
-        request.input('Email', sql.NVarChar, Email);
-        request.input('Password', sql.VarChar, hashedPassword);
+    const request = pool.request();
+    request.input("UserName", sql.VarChar, UserName);
+    request.input("PhoneNo", sql.BigInt, PhoneNo);
+    request.input("Email", sql.NVarChar, Email);
+    request.input("Password", sql.VarChar, hashedPassword);
 
-        await request.query('INSERT INTO Users (UserName, PhoneNo, Email, Password) VALUES (@UserName, @PhoneNo, @Email, @Password)');
+    await request.query(
+      "INSERT INTO Users (UserName, PhoneNo, Email, Password) VALUES (@UserName, @PhoneNo, @Email, @Password)"
+    );
 
-        res.status(200).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error('Error registering user:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+    res.status(200).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Error registering user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const userLogin = async (req, res) => {
+  const { Email, Password } = req.body;
+  const decryptedPassword = decryptMessage(Password);
+  const hashedPassword = md5(decryptedPassword);
+  try {
+    const pool = await poolPromise;
+    const request = pool.request();
+    request.input("Email", sql.VarChar, Email);
+    request.input("Password", sql.VarChar, hashedPassword);
+
+    const userInDb = await request.query(
+      "select Password from Users where Email = @Email"
+    );
+    console.log(userInDb)
+    if (userInDb.recordset.length > 0 && userInDb.recordset[0].Password === hashedPassword) {
+      res.status(200).json({ message: "Authorized" });
+    } else {
+      res.status(500).json({ message: "Unauthorized" });
     }
+  } catch(error) {
+    console.error(error)
+    res.status(400).json({message: "Internal Server Error"})
+  }
+};
 
-}
-
-module.exports = {userRegistration}
+module.exports = { userRegistration, userLogin };
