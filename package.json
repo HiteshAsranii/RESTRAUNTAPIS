@@ -1,10 +1,31 @@
 {
   "dependencies": {
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "md5": "^2.3.0",
     "moment": "^2.29.4",
     "mssql": "^10.0.1",
     "node-rsa": "^1.1.1"
-  }
+  },
+  "name": "restrauntapis",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HiteshAsranii/RESTRAUNTAPIS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HiteshAsranii/RESTRAUNTAPIS/issues"
+  },
+  "homepage": "https://github.com/HiteshAsranii/RESTRAUNTAPIS#readme",
+  "description": ""
 }

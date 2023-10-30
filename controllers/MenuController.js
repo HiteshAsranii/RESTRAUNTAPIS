@@ -98,9 +98,9 @@ const updateMenuItem = async (req, res) => {
             dataType = sql.Int;
             break;
           case "ItemName":
-            dataType = sql.VarChar; // Adjust this based on the actual data type
+            dataType = sql.VarChar; 
             break;
-          // Add cases for other fields with their respective data types
+          
           case "ItemPrice":
             dataType = sql.Int;
             break;
@@ -108,7 +108,7 @@ const updateMenuItem = async (req, res) => {
             dataType = sql.Binary;
             break;
           default:
-            dataType = sql.VarChar; // Set a default data type if needed
+            dataType = sql.VarChar; 
         }
         request.input(key, dataType, updates[key]);
         return `${key} = @${key}`;

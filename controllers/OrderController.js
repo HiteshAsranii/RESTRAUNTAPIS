@@ -7,7 +7,7 @@ app.use(express.json());
 
 const placeOrder = async (req, res) => {
   try {
-    const { orderDetails, orderItems } = req.body; // Destructure orderDetails and orderItems
+    const { orderDetails, orderItems } = req.body; 
 
     const pool = await poolPromise;
     const request = pool.request();
@@ -16,7 +16,7 @@ const placeOrder = async (req, res) => {
     const orderDate = moment().format("YYYY-MM-DD");
     const orderTime = moment().format("HH:mm:ss");
 
-    // Log the date and time for debugging
+    
     console.log(orderDate);
     console.log(orderTime);
 
@@ -26,16 +26,16 @@ const placeOrder = async (req, res) => {
     request.input("OrderTotal", sql.Int, orderDetails.OrderTotal);
     request.input("OrderStatus", sql.VarChar, "Placed");
 
-    // Define TVP as a table with rows
+    
     const tvp = new sql.Table();
-    tvp.columns.add("ItemIndex", sql.Int); // Add ItemIndex column
+    tvp.columns.add("ItemIndex", sql.Int); 
     tvp.columns.add("ItemId", sql.Int);
     tvp.columns.add("Quantity", sql.Int);
     tvp.columns.add("Subtotal", sql.Int);
 
     // Populate the TVP
     orderItems.forEach((item, index) => {
-      tvp.rows.add(index + 1, item.ItemId, item.Quantity, item.Subtotal); // Assign unique index values
+      tvp.rows.add(index + 1, item.ItemId, item.Quantity, item.Subtotal); 
     });
 
     request.input("OrderItems", sql.TVP, tvp);
@@ -61,14 +61,14 @@ const updateOrder = async (req, res) => {
     request.input("TableId", sql.Int, tableId);
     request.input("OrderTotal", sql.Int, orderDetails.OrderTotal);
     const tvp = new sql.Table();
-    tvp.columns.add("ItemIndex", sql.Int); // Add ItemIndex column
+    tvp.columns.add("ItemIndex", sql.Int); 
     tvp.columns.add("ItemId", sql.Int);
     tvp.columns.add("Quantity", sql.Int);
     tvp.columns.add("Subtotal", sql.Int);
 
     // Populate the TVP
     orderItems.forEach((item, index) => {
-      tvp.rows.add(index + 1, item.ItemId, item.Quantity, item.Subtotal); // Assign unique index values
+      tvp.rows.add(index + 1, item.ItemId, item.Quantity, item.Subtotal); 
     });
 
     request.input("OrderItems", sql.TVP, tvp);
